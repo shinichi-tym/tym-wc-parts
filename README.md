@@ -67,7 +67,7 @@ npm i tym-wc-parts
 
 ---
 ### ライセンス (License)
-The components in tym-ng-ws are released under the MIT license. [Read license](//github.com/shinichi-tym/tym-ng-ws/blob/main/LICENSE).
+The components in tym-ng-ws are released under the MIT license. [Read license](//github.com/shinichi-tym/tym-wc-parts/blob/main/LICENSE).
 
 ---
 Copyrights belong to shinichi tayama (shinichi.tym).

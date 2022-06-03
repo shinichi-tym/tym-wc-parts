@@ -1,9 +1,9 @@
 {
   "name": "tym-wc-parts",
-  "description": "Webcomponent tym-wc-parts following open-wc recommendations",
+  "version": "0.7.1",
+  "description": "Web Components created by tym",
   "license": "MIT",
   "author": "tym-wc-parts",
-  "version": "0.0.0",
   "main": "dist/tym-wc-parts/index.js",
   "module": "dist/tym-wc-parts/index.js",
   "files": [
