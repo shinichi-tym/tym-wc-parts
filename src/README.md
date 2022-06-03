@@ -8,13 +8,19 @@
 
 <br>
 
+```
+  please wait ...
+```
+
+<br>
+
 ---
 
 <br>
 
 動作イメージ (Demo screen)
 
-[https://shinichi-tym.github.io/tym-wc-parts/index.html]
+[https://shinichi-tym.github.io/tym-wc-parts-demo/]
 
 <br>
 
@@ -42,6 +48,8 @@ npm i tym-wc-parts
 
 <br>
 
+<h2 id="tym-wc-table-view"></h2>
+
 > ## 簡易テーブル表示 `[tym-wc-table-view]`
 
 <br>
@@ -61,13 +69,18 @@ npm i tym-wc-parts
 <tym-wc-table-view></tym-wc-table-view>
 ```
 
+<br>
+
+<h2 id="tym-wc-tree-view"></h2>
+
+> ## 簡易ツリー表示 `[tym-wc-tree-view]`
 
 <br>
 <br>
 
 ---
 ### ライセンス (License)
-The components in tym-ng-ws are released under the MIT license. [Read license](//github.com/shinichi-tym/tym-ng-ws/blob/main/LICENSE).
+The components in tym-ng-ws are released under the MIT license. [Read license](//github.com/shinichi-tym/tym-wc-parts/blob/main/LICENSE).
 
 ---
 Copyrights belong to shinichi tayama (shinichi.tym).

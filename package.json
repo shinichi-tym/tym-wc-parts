@@ -3,7 +3,7 @@
   "version": "0.7.1",
   "description": "Web Components created by tym",
   "license": "MIT",
-  "author": "tym-wc-parts",
+  "author": "Shinichi Tayama <shinichi.tym@gmail.com> (https://github.com/shinichi-tym/)",
   "main": "dist/tym-wc-parts/index.js",
   "module": "dist/tym-wc-parts/index.js",
   "files": [
@@ -17,8 +17,8 @@
   "scripts": {
     "analyze": "cem analyze --litelement",
     "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds\"",
-    "build": "tsc && npm run analyze -- --exclude dist",
-    "prepublish": "tsc && npm run analyze -- --exclude dist"
+    "copyfile": "copy \"src/README.md\" \"dist/\" && copy \"src/package.json\" \"dist/\"",
+    "build": "tsc && npm run copyfile && npm run analyze -- --exclude dist"
   },
   "dependencies": {
     "lit": "^2.0.2"
