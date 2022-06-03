@@ -1,0 +1,26 @@
+{
+  "name": "tym-wc-parts",
+  "version": "0.7.1",
+  "description": "Web Components created by tym",
+  "keywords": ["front-end", "web", "Webcomponent", "resize", "table", "grid"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shinichi-tym/tym-wc-parts.git"
+  },
+  "author": "Shinichi Tayama <shinichi.tym@gmail.com> (https://github.com/shinichi-tym/)",
+  "homepage": "https://github.com/shinichi-tym/",
+  "license" : "MIT",
+  "dependencies": {
+    "lit": "^2.0.2"
+  },
+  "type": "module",
+  "main": "tym-wc-parts/index.js",
+  "module": "tym-wc-parts/index.js",
+  "files": [
+    "tym-wc-parts/"
+  ],
+  "exports": {
+    ".": "./tym-wc-parts/index.js",
+    "./tym-wc-table-view.js": "./tym-wc-parts/tym-wc-table-view.js"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "lib": ["esnext", "dom"],
+    "strict": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "outDir": "dist/tym-wc-parts",
+    "sourceMap": true,
+    "inlineSources": true,
+    "rootDir": "./src",
+    "declaration": true,
+    "incremental": true,
+    "removeComments": true,
+    "useDefineForClassFields": false
+  },
+  "include": ["**/*.ts"]
+}

@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <title>tym-wc-parts</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8">
+</head>
+
+<body>
+  <h1>tym-wc-parts</h1>
+  <hr>
+  <!-- ////////////////////////////////////////////////////////// -->
+  <div style="padding: 0 2em">
+    <h2 id="TymWcTableViewHead">tym-wc-table-view(click me)</h2>
+    <script>
+      TymWcTableViewHead.onclick = () => {
+        var o = TymWcTableView.style;
+        o.display = o.display == 'block' ? 'none' : 'block'
+      }
+    </script>
+    <hr>
+    <div id="TymWcTableView" style="padding: 0 2em;display: none;">
+      <h3>insert tag by script</h3>
+      <div id="demo1"></div>
+      <h3>tag only</h3>
+      <tym-wc-table-view>
+        --,--,--,--
+        BB,1,2,3
+        BB,4,5,6
+      </tym-wc-table-view>
+      <h3>use text-align attribute(rightCols, centerCols)</h3>
+      <tym-wc-table-view rightCols="[2,3]" centerCols="[4]">
+        ----------,----------,----------,----------
+        left,1,2,center
+        left,4,5,center
+      </tym-wc-table-view>
+      <h3>use column labels attribute(cols)</h3>
+      <tym-wc-table-view cols='["col1","col2","col3","col4"]'>
+        DD,1,2,3
+        DD,4,5,6
+      </tym-wc-table-view>
+      <h3>update data</h3>
+      <tym-wc-table-view id="demo2" />
+    </div>
+  </div>
+  <!-- ////////////////////////////////////////////////////////// -->
+  <div style="padding: 0 2em">
+    <h2 id="TymWcTreeViewHead">tym-wc-tree-view(click me)</h2>
+    <script>
+      TymWcTreeViewHead.onclick = () => {
+        var o = TymWcTreeView.style;
+        o.display = o.display == 'block' ? 'none' : 'block'
+      }
+    </script>
+    <hr>
+    <div id="TymWcTreeView" style="padding: 0 2em;display: none;">
+      <h3>coming soon ...</h3>
+    </div>
+  </div>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <!-- ////////////////////////////////////////////////////////// -->
+  <script type="module">
+    import { html, render } from 'lit';
+    import '../dist/tym-wc-parts/';
+
+    const cols = ['column1', 'column2'];
+    const data = [
+      ['aaaaa', 'ccc'],
+      ['ddddd', 'eee']
+    ].join('\n')
+    const h = html`<tym-wc-table-view .cols=${cols} .textContent=${data} .lastsp=${true} />`;
+    render(h, document.querySelector('#demo1'));
+
+    const demo2 = document.querySelector('#demo2');
+    demo2.lastsp = false;
+    const colss = [
+      ['column1', 'column2', 'column3', 'column4'],
+      ['AAAAAAAAAA', 'BBBBBBBBBB'],
+      ['Column1', 'Column2', 'Column3', 'Column4', 'Column5'],
+    ];
+    const datas = [
+      [['EE', 1, 2, 3], ['EE', 1, 2, 3], ['EE', 1, 2, 3]],
+      [['A', 'B'], ['AA', 'BB'], ['AAA', 'BBB'], ['AAAA', 'BBBB']],
+      [['EEEE', 123, 1234, 12345, 123456]],
+    ];
+    const rights = [
+      [2,3,4],
+      [],
+      [2,3,4,5],
+    ]
+    let idx = 0;
+    setInterval(() => {
+      Object.assign(demo2, {
+        cols: colss[idx],
+        textContent: datas[idx].join('\n'),
+        rightCols: rights[idx],
+        lastsp: Math.random() > .5,
+      });
+      idx++; if (idx >= colss.length) idx = 0;
+    }, 2000);
+  </script>
+</body>
+
+</html>
