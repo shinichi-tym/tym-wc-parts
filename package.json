@@ -2,23 +2,35 @@
   "name": "tym-wc-parts",
   "version": "0.7.1",
   "description": "Web Components created by tym",
+  "keywords": [
+    "front-end",
+    "web",
+    "Webcomponent",
+    "resize",
+    "table",
+    "grid"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shinichi-tym/tym-wc-parts.git"
+  },
   "license": "MIT",
   "author": "Shinichi Tayama <shinichi.tym@gmail.com> (https://github.com/shinichi-tym/)",
-  "main": "dist/tym-wc-parts/index.js",
-  "module": "dist/tym-wc-parts/index.js",
+  "homepage": "https://github.com/shinichi-tym/",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "files": [
-    "dist/tym-wc-parts/"
+    "dist"
   ],
-  "types": "dist/tym-wc-parts/index.d.ts",
+  "types": "dist/index.d.ts",
   "exports": {
-    ".": "./dist/tym-wc-parts/index.js",
-    "./tym-wc-table-view.js": "./dist/tym-wc-parts/tym-wc-table-view.js"
+    ".": "./dist/index.js",
+    "./tym-wc-table-view.js": "./dist/tym-wc-table-view.js"
   },
   "scripts": {
     "analyze": "cem analyze --litelement",
     "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds\"",
-    "copyfile": "copy \"src/README.md\" \"dist/\" && copy \"src/package.json\" \"dist/\"",
-    "build": "tsc && npm run copyfile && npm run analyze -- --exclude dist"
+    "build": "tsc && npm run analyze -- --exclude dist"
   },
   "dependencies": {
     "lit": "^2.0.2"

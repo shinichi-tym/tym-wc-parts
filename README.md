@@ -20,7 +20,7 @@
 
 動作イメージ (Demo screen)
 
-[https://shinichi-tym.github.io/tym-wc-parts/index.html]
+[https://shinichi-tym.github.io/tym-wc-parts-demo/]
 
 <br>
 
@@ -32,14 +32,50 @@
 npm i tym-wc-parts
 ```
 
+## 使い方 `(Usage)`
+
+```html
+<script type="module">
+  import 'tym-wc-parts/';
+</script>
+
+  :
+```
+
+<br>
+
 ---
 
 <br>
 
-## 目次 (Table of contents)
-1. [tym-wc-table-view](/src/README.md#tym-wc-table-view)
+<h2 id="tym-wc-table-view"></h2>
 
+> ## 簡易テーブル表示 `[tym-wc-table-view]`
 
+<br>
+
+単純な二次元配列を，簡易にテーブル表示します。
+カラムのリサイズが可能です。
+
+<br>
+
+## Usage
+
+```html
+<script type="module">
+  import 'https://unpkg.com/tym-wc-parts@0.7.1/dist/tym-wc-table-view.js';
+</script>
+
+<tym-wc-table-view></tym-wc-table-view>
+```
+
+<br>
+
+<h2 id="tym-wc-tree-view"></h2>
+
+> ## 簡易ツリー表示 `[tym-wc-tree-view]`
+
+<br>
 <br>
 
 ---
