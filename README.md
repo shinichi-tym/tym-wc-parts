@@ -8,12 +8,6 @@
 
 <br>
 
-```
-  please wait ...
-```
-
-<br>
-
 ---
 
 <br>
@@ -30,13 +24,54 @@
 
 ```
 npm i tym-wc-parts
+
+※ CDN 利用の場合は不要
 ```
 
-## 使い方 `(Usage)`
+## 使い方 `(Usage:Angular)`
+
+```typescript : app.module.ts
+//--- app.module.ts ---
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+  :
+@NgModule({
+  :
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  :
+})
+
+//--- app.component.ts ---
+import 'tym-wc-parts';
+  :
+@Output() textContent: string = [
+  ['header','header','header','header'],
+  ['aaa',123,'AAA',12345],
+  ['bbb',456,'BBB',456789],
+].join('\n');
+  :
+```
 
 ```html
+<tym-wc-table-view
+ [textContent]="textContent"
+ right-cols="2,4"
+ last-sp="false"
+></tym-wc-table-view>
+```
+
+## 使い方 `(Usage:CDN)`
+
+```html
+<tym-wc-table-view right-cols="2,4" last-sp="false">
+  header,header,header,header
+  aaa,123,AAA,12345
+  bbb,456,BBB,456789
+</tym-wc-table-view>
+
 <script type="module">
-  import 'tym-wc-parts/';
+  //(例)
+  import 'https://unpkg.com/tym-wc-parts/tym-wc-table-view.js';
+  // import 'tym-wc-parts/';
 </script>
 
   :
@@ -54,19 +89,91 @@ npm i tym-wc-parts
 
 <br>
 
-単純な二次元配列を，簡易にテーブル表示します。
-カラムのリサイズが可能です。
+単純な csv 形式データを, 簡易にテーブル表示します。  
+行ヘッダーをマウスでリサイズできます(not firefox)。
 
 <br>
+
+- [定義]
+``` html
+<tym-wc-table-view
+  cols="単価,販売数,売上"
+  right-cols="1,2,3"
+  center-cols=""
+  last-sp="false"
+  max-width="200">
+980,627,614460
+1980,1219,2413620
+2980,116,345680
+3980,616,2451680
+</tym-wc-table-view>
+<!-- 各パラメタは javascript 等で更新しても反映されない-->
+```
+
+- `cols: csv`
+  - カラムヘッダーを csv 形式で指定する
+  - 省略した場合は, `textContent` の先頭行をカラムヘッダーとして表示する
+
+- `right-cols: csv`
+  - 右揃えカラムの番号を csv 形式で指定する
+
+- `center-cols: csv`
+  - 中央揃えカラムの番号を csv 形式で指定する
+
+- `last-sp: boolean`
+  - 最終カラムを追加するか否かを指定する
+    - true : 追加する(デフォルト)
+    - false : 追加しない
+
+- `max-width: number`
+  - セル幅が大きい場合の最大セル幅を指定する (default 200)
+
+- `textContent: string`
+  - 表示するデータを 改行区切りの csv 形式で指定する
+  - `textContent` は, 一度だけ更新できる
 
 ## Usage
 
 ```html
 <script type="module">
-  import 'https://unpkg.com/tym-wc-parts@0.7.1/dist/tym-wc-table-view.js';
+  import 'https://unpkg.com/tym-wc-parts/tym-wc-table-view.js';
 </script>
 
-<tym-wc-table-view></tym-wc-table-view>
+<tym-wc-table-view
+ right-cols="1,2,3"
+ center-cols=""
+ last-sp="false"
+ max-width="200">
+  単価,販売数,売上
+  980,627,614460
+  1980,1219,2413620
+  2980,116,345680
+  3980,616,2451680
+</tym-wc-table-view>
+```
+
+```html
+<script type="module">
+  import 'https://unpkg.com/tym-wc-parts/tym-wc-table-view.js';
+</script>
+
+<tym-wc-table-view id="tymWcTableView"
+ cols="単価,販売数,売上"
+ right-cols="1,2,3"
+ center-cols=""
+ last-sp="false"
+ max-width="200"
+></tym-wc-table-view>
+
+<script type="javascript">
+  document.getElementById("tymWcTableView")
+    .textContent = [
+      [980,627,614460],
+      [1980,1219,2413620],
+      [2980,116,345680],
+      [3980,616,2451680]
+    ].join("\n");
+</script>
 ```
 
 <br>
@@ -76,6 +183,11 @@ npm i tym-wc-parts
 > ## 簡易ツリー表示 `[tym-wc-tree-view]`
 
 <br>
+
+```
+  please wait ...
+```
+
 <br>
 
 ---

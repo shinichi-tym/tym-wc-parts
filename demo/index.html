@@ -21,27 +21,40 @@
     </script>
     <hr>
     <div id="TymWcTableView" style="padding: 0 2em;display: none;">
-      <h3>insert tag by script</h3>
-      <div id="demo1"></div>
       <h3>tag only</h3>
-      <tym-wc-table-view>
-        --,--,--,--
-        BB,1,2,3
-        BB,4,5,6
-      </tym-wc-table-view>
-      <h3>use text-align attribute(rightCols, centerCols)</h3>
-      <tym-wc-table-view rightCols="[2,3]" centerCols="[4]">
+      <tym-wc-table-view right-cols="2,3,9" center-cols="4" last-sp="true">
         ----------,----------,----------,----------
         left,1,2,center
         left,4,5,center
       </tym-wc-table-view>
-      <h3>use column labels attribute(cols)</h3>
-      <tym-wc-table-view cols='["col1","col2","col3","col4"]'>
-        DD,1,2,3
-        DD,4,5,6
+      <br>
+      <tym-wc-table-view right-cols="1,2,3" last-sp="false">
+        単価,販売数,売上
+        980,627,614460
+        1980,1219,2413620
+        2980,116,345680
+        3980,616,2451680
       </tym-wc-table-view>
-      <h3>update data</h3>
-      <tym-wc-table-view id="demo2" />
+      <br>
+      <h3>delay setting for csv data by script</h3>
+      <tym-wc-table-view id="demo1" last-sp="false">
+      </tym-wc-table-view>
+      <script>
+        setTimeout(() => {
+          var elm = document.getElementById('demo1');
+          elm.textContent = [['--', '--', '--'], ['aa', 'bb', 'cc']].join('\n');
+        }, 2000);
+      </script>
+      <br>
+      <h3>create tag by script</h3>
+      <div id="demo2"></div>
+      <script>
+        var elm = document.createElement('tym-wc-table-view');
+        elm.textContent = "--,--,--\nAA,BB,CC";
+        document.getElementById('demo2').appendChild(elm);
+      </script>
+ 
+
     </div>
   </div>
   <!-- ////////////////////////////////////////////////////////// -->
@@ -66,44 +79,8 @@
   <br>
   <!-- ////////////////////////////////////////////////////////// -->
   <script type="module">
-    import { html, render } from 'lit';
-    import '../dist/tym-wc-parts/';
-
-    const cols = ['column1', 'column2'];
-    const data = [
-      ['aaaaa', 'ccc'],
-      ['ddddd', 'eee']
-    ].join('\n')
-    const h = html`<tym-wc-table-view .cols=${cols} .textContent=${data} .lastsp=${true} />`;
-    render(h, document.querySelector('#demo1'));
-
-    const demo2 = document.querySelector('#demo2');
-    demo2.lastsp = false;
-    const colss = [
-      ['column1', 'column2', 'column3', 'column4'],
-      ['AAAAAAAAAA', 'BBBBBBBBBB'],
-      ['Column1', 'Column2', 'Column3', 'Column4', 'Column5'],
-    ];
-    const datas = [
-      [['EE', 1, 2, 3], ['EE', 1, 2, 3], ['EE', 1, 2, 3]],
-      [['A', 'B'], ['AA', 'BB'], ['AAA', 'BBB'], ['AAAA', 'BBBB']],
-      [['EEEE', 123, 1234, 12345, 123456]],
-    ];
-    const rights = [
-      [2,3,4],
-      [],
-      [2,3,4,5],
-    ]
-    let idx = 0;
-    setInterval(() => {
-      Object.assign(demo2, {
-        cols: colss[idx],
-        textContent: datas[idx].join('\n'),
-        rightCols: rights[idx],
-        lastsp: Math.random() > .5,
-      });
-      idx++; if (idx >= colss.length) idx = 0;
-    }, 2000);
+    import '../dist/tym-wc-parts/tym-wc-table-view.js';
+    import './tym-wc-table-view.js';
   </script>
 </body>
 

@@ -1,6 +1,6 @@
 {
   "name": "tym-wc-parts",
-  "version": "0.7.1",
+  "version": "0.7.3",
   "description": "Web Components created by tym",
   "keywords": [
     "front-end",
@@ -33,7 +33,6 @@
     "build": "tsc && npm run analyze -- --exclude dist"
   },
   "dependencies": {
-    "lit": "^2.0.2"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.4.17",
