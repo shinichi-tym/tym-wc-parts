@@ -94,6 +94,12 @@ import 'tym-wc-parts';
 
 <br>
 
+表示サンプル (Display image)
+
+![表示サンプル](/tym-wc-table-view.png)
+
+<br>
+
 - [定義]
 ``` html
 <tym-wc-table-view
@@ -189,9 +195,15 @@ import 'tym-wc-parts';
 
 <br>
 
+表示サンプル (Display image)
+
+![表示サンプル](/tym-wc-tree-view.png)
+
+<br>
+
 - [定義]
 ``` html
-<tym-wc-tree-view></tym-wc-table-view>
+<tym-wc-tree-view></tym-wc-tree-view>
 ```
 
 - `tree: TREE`
@@ -232,7 +244,7 @@ import 'tym-wc-parts';
   import 'https://unpkg.com/tym-wc-parts/tym-wc-tree-view.js';
 </script>
 
-<tym-wc-table-view id="target"></tym-wc-table-view>
+<tym-wc-tree-view id="target"></tym-wc-tree-view>
 
 <script>
   var target = document.getElementById('target');
@@ -259,11 +271,11 @@ import 'tym-wc-parts';
 ## Usage:Angular
 
 ```html
-<tym-wc-table-view
+<tym-wc-tree-view
   [tree]="treedata"
   [leafclick]="leafclick"
   [leafmenu]="leafmenu"
-></tym-wc-table-view>
+></tym-wc-tree-view>
 ```
 
 ```typescript
