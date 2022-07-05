@@ -1,6 +1,6 @@
 {
   "name": "tym-wc-parts",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "description": "Web Components created by tym",
   "keywords": [
     "front-end",
@@ -8,7 +8,9 @@
     "Webcomponent",
     "resize",
     "table",
-    "grid"
+    "grid",
+    "tree",
+    "folder"
   ],
   "repository": {
     "type": "git",
@@ -25,7 +27,8 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",
-    "./tym-wc-table-view.js": "./dist/tym-wc-table-view.js"
+    "./tym-wc-table-view.js": "./dist/tym-wc-table-view.js",
+    "./tym-wc-tree-view.js": "./dist/tym-wc-tree-view.js"
   },
   "scripts": {
     "analyze": "cem analyze --litelement",

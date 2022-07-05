@@ -9,18 +9,19 @@
 /**
  * utility class
  */
-export const _ = {
+const _ = {
   sss: (t: string) => t.split(/\r\n|\n/).reduce((r, s) => r + s.trim(), ''),
   typ: (t: any) => Object.prototype.toString.call(t).slice(8, -1).toLowerCase(),
   //@ts-ignore
-  css: (t: TemplateStringsArray, ...v: any[]) => { const c = new CSSStyleSheet(); c.replaceSync(_.htm(t, v)); return c },
+  css: (t: TemplateStringsArray, ...v: any[]) => { const c = new CSSStyleSheet(); c.replaceSync(_.htm(t, ...v)); return c },
   // cst: (t: TemplateStringsArray, ...v: any[]) => Array.from(_.css(t, v).cssRules).reduce((r, c) => r + c.cssText, ''),
-  cst: (t: TemplateStringsArray, ...v: any[]) => _.htm(t, v),
-  htm: (t: TemplateStringsArray, ...v: any[]) => v.reduce((r, s, i) => r + _.sss(t[i]) + s, '') + _.sss(t.slice(-1)[0]),
+  cst: (t: TemplateStringsArray, ...v: any[]) => _.htm(t, ...v),
+  htm: (t: TemplateStringsArray, ...v: any[]) => (v.push(''), t.reduce((r, s, i) => r + _.sss(s) + v[i], '')),
 }
 
 /////////////////////////////////////////////////////////////////////
-const [css, html] = [(CSSStyleSheet) ? _.css : _.cst, _.htm];
+const isCSSSS = !!CSSStyleSheet;
+const [css, html] = [isCSSSS ? _.css : _.cst, _.htm];
 
 /////////////////////////////////////////////////////////////////////
 /**

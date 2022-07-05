@@ -184,8 +184,106 @@ import 'tym-wc-parts';
 
 <br>
 
+単純な文字列ツリー構造データを，簡易にツリー表示します。  
+選択内容の通知が可能です。コンテキストメニューが可能です。
+
+<br>
+
+- [定義]
+``` html
+<tym-wc-tree-view></tym-wc-table-view>
 ```
-  please wait ...
+
+- `tree: TREE`
+  - 文字列ツリー構造データを指定する
+    ``` typescript
+    type TREE = TREE[] | string
+    const tree: TREE = [
+      'leaf-text',
+      'leaf-text',
+      [
+        'leaf-text',
+        'leaf-text',
+      ],
+      'leaf-text',
+    ]
+    ```
+- `leafclick: (event: MouseEvent, texts: string[]) => void`
+  - leaf クリック時の関数を指定する
+    ``` typescript
+    target.leafclick = (event, texts) => {
+      console.log(event, texts);
+    }
+    ```
+- `leafmenu: (event: MouseEvent, texts: string[]) => void`
+  - leaf 右クリック時の関数を指定する
+    ``` typescript
+    target.leafmenu = (event, texts) => {
+      console.log(event, texts);
+      event.preventDefault();
+      return false;
+    }
+    ```
+
+## Usage
+
+```html
+<script type="module">
+  import 'https://unpkg.com/tym-wc-parts/tym-wc-tree-view.js';
+</script>
+
+<tym-wc-table-view id="target"></tym-wc-table-view>
+
+<script>
+  var target = document.getElementById('target');
+  target.tree = [
+    'leaf-text',
+    'leaf-text',
+    [
+      'leaf-text',
+      'leaf-text',
+    ],
+    'leaf-text',
+  ];
+  target.leafclick = (event, texts) => {
+    console.log(event, texts);
+  }
+  target.leafmenu = (event, texts) => {
+    console.log(event, texts);
+    event.preventDefault();
+    return false;
+  }
+</script>
+```
+
+## Usage:Angular
+
+```html
+<tym-wc-table-view
+  [tree]="treedata"
+  [leafclick]="leafclick"
+  [leafmenu]="leafmenu"
+></tym-wc-table-view>
+```
+
+```typescript
+@Output() treedata = [
+  'leaf-text',
+  'leaf-text',
+  [
+    'leaf-text',
+    'leaf-text',
+  ],
+  'leaf-text',
+];
+@Output() leafclick = (event: MouseEvent, texts: string[]) => {
+  console.log(event, texts);
+}
+@Output() leafmenu = (event: MouseEvent, texts: string[]) => {
+  console.log(event, texts);
+  event.preventDefault();
+  return false;
+}
 ```
 
 <br>

@@ -13,10 +13,10 @@ const _ = {
   sss: (t: string) => t.split(/\r\n|\n/).reduce((r, s) => r + s.trim(), ''),
   typ: (t: any) => Object.prototype.toString.call(t).slice(8, -1).toLowerCase(),
   //@ts-ignore
-  css: (t: TemplateStringsArray, ...v: any[]) => { const c = new CSSStyleSheet(); c.replaceSync(_.htm(t, v)); return c },
+  css: (t: TemplateStringsArray, ...v: any[]) => { const c = new CSSStyleSheet(); c.replaceSync(_.htm(t, ...v)); return c },
   // cst: (t: TemplateStringsArray, ...v: any[]) => Array.from(_.css(t, v).cssRules).reduce((r, c) => r + c.cssText, ''),
-  cst: (t: TemplateStringsArray, ...v: any[]) => _.htm(t, v),
-  htm: (t: TemplateStringsArray, ...v: any[]) => v.reduce((r, s, i) => r + _.sss(t[i]) + s, '') + _.sss(t.slice(-1)[0]),
+  cst: (t: TemplateStringsArray, ...v: any[]) => _.htm(t, ...v),
+  htm: (t: TemplateStringsArray, ...v: any[]) => (v.push(''), t.reduce((r, s, i) => r + _.sss(s) + v[i], '')),
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -34,8 +34,7 @@ export class TymWcTableView extends HTMLElement {
   constructor() {
     // console.log('>> constructor.');
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
-    // this.__init(this.attachShadow({ mode: 'open' }));
+    this.attachShadow({ mode: 'open' });
   }
 
   connectedCallback() {
@@ -60,12 +59,31 @@ export class TymWcTableView extends HTMLElement {
   /**
    * プロパティ
    */
-  private __props = {
-    cols: Array<string>(),
-    lastSp: true,
-    maxWidth: 200,
-    rightCols: Array<string>(),
-    centerCols: Array<string>(),
+
+  /** カラムヘッダーを csv 形式で指定 */
+  get cols(): string[] { const v = this.getAttribute('cols'); return (v) ? v.split(',') : [] }
+  set cols(v: string | Array<string>) {
+    this.setAttribute('cols', (typeof v === 'object') ? v.join(',') : v)
+  }
+
+  /** 最終カラムを追加するか否かを指定 (default:true) */
+  get lastSp() { return this.getAttribute('last-sp') == 'true' }
+  set lastSp(value: string | boolean) { this.setAttribute('last-sp', value.toString()) }
+
+  /** セル幅が大きい場合の最大セル幅を指定 (default:200) */
+  get maxWidth() { return parseInt(this.getAttribute('max-width') || '200') }
+  set maxWidth(value: string | number) { this.setAttribute('max-width', value.toString()) }
+
+  /** 右揃えカラムの番号を csv 形式で指定, nth-child(${value}) */
+  get rightCols() { const v = this.getAttribute('right-cols'); return (v) ? v.split(',') : [] }
+  set rightCols(value: string | Array<string | number>) {
+    this.setAttribute('right-cols', (typeof value === 'object') ? value.join(',') : value)
+  }
+
+  /** 中央揃えカラムの番号を csv 形式で指定, nth-child(${value}) */
+  get centerCols() { const v = this.getAttribute('center-cols'); return (v) ? v.split(',') : [] }
+  set centerCols(value: string | Array<string | number>) {
+    this.setAttribute('center-cols', (typeof value === 'object') ? value.join(',') : value)
   }
 
   ///////////////////////////////////////////////////////////////////
@@ -79,16 +97,16 @@ export class TymWcTableView extends HTMLElement {
    * セル幅を調整する
    */
   private __resize(): void {
-    const FIRST_ELM_CHILD = (elm: HTMLElement) => elm.firstElementChild;
-    const { maxWidth, lastSp } = this.__props;
+    const FEC = (elm: HTMLElement) => elm.firstElementChild;
+    const { maxWidth, lastSp } = this;
     const shadow = this.shadowRoot as ShadowRoot;
-    const tableElm = shadow.querySelector('table') as HTMLTableElement; // table
-    if (!tableElm) return;
-    const theadElm = FIRST_ELM_CHILD(tableElm) as HTMLTableSectionElement; // thead
-    const theadTrElm = FIRST_ELM_CHILD(theadElm) as HTMLTableRowElement; // tr
-    const theadTrLastThElm = theadTrElm.lastElementChild as HTMLElement; // last th
-    const thElms = theadTrElm.querySelectorAll('th');
-    tableElm.style.width = '';
+    const tblElm = shadow.querySelector('table') as HTMLTableElement; // table
+    if (!tblElm) return;
+    const thdElm = FEC(tblElm) as HTMLTableSectionElement; // thead
+    const thdTrElm = FEC(thdElm) as HTMLTableRowElement; // tr
+    const thdTrLstThElm = thdTrElm.lastElementChild as HTMLElement; // last th
+    const thElms = thdTrElm.querySelectorAll('th');
+    tblElm.style.width = '';
     thElms.forEach(th => (th.style.width = ''));
     thElms.forEach(th => {
       th.style.width =
@@ -96,7 +114,7 @@ export class TymWcTableView extends HTMLElement {
           ? `${maxWidth}px`
           : window.getComputedStyle(th).width;
     });
-    tableElm.style.width = lastSp ? ((theadTrLastThElm.style.width = ''), '100%') : '';
+    tblElm.style.width = lastSp ? ((thdTrLstThElm.style.width = ''), '100%') : '';
   }
 
   ///////////////////////////////////////////////////////////////////
@@ -107,7 +125,7 @@ export class TymWcTableView extends HTMLElement {
   private __makedata(): [string[], string[][]] {
     /////////////////////////////////////////////////////////////////
     // make cols and data from textContent,this.cols
-    const { cols } = this.__props;
+    const cols = this.cols;
     const txt = (this.textContent || '').trim();
     if (cols?.length <= 0 && txt.length <= 0) {
       const observer = new MutationObserver(() => {
@@ -118,7 +136,7 @@ export class TymWcTableView extends HTMLElement {
         }
       });
       observer.observe(this, { childList: true, characterData: true });
-      return [[], []]
+      return [[], []];
     }
     let data: string[][] = [];
     txt.split(/\r\n|\n/)
@@ -153,7 +171,7 @@ export class TymWcTableView extends HTMLElement {
    */
   private __makehtml(): string {
     const [_cols, _data] = this.__makedata();
-    const [lastspth, lastsptd] = this.__props.lastSp
+    const [lastspTh, lastspTd] = this.lastSp
       ? [`<th class="lastsp"></th>`, `<td class="lastsp"></td>`]
       : [``, ``];
     const _html = html`
@@ -161,13 +179,13 @@ export class TymWcTableView extends HTMLElement {
         <thead>
           <tr>
             ${_cols.reduce((r, col) =>
-              r + `<th title="${col}">${col}</th>`, '')}${lastspth}
+              r + `<th title="${col}">${col}</th>`, '')}${lastspTh}
           </tr>
         </thead>
         <tbody>
           ${_data.reduce((r, row) =>
             r + `<tr>${row.reduce((r, col) =>
-              r + `<td title="${col}">${col}</td>`, '')}${lastsptd}</tr>`, '')}
+              r + `<td title="${col}">${col}</td>`, '')}${lastspTd}</tr>`, '')}
         </tbody>
       </table>
     `;
@@ -178,25 +196,10 @@ export class TymWcTableView extends HTMLElement {
   /**
    * 初期化
    */
-   private __init(shadow: ShadowRoot): void {
-    /////////////////////////////////////////////////////////////////
-    // set attributes to variable
-    const attrs = this.attributes;
-    const cnv = {
-      array: (x: string) => x.split(','),
-      boolean: (x: string) => x == 'true',
-      number: (x: string) => parseInt(x),
-    }
-    const props = this.__props;
-    Object.keys(props).forEach(name => {
-      const [name1, name2] = [name.toLowerCase(), name.replace(/([A-Z])/g, '-$1').toLowerCase()];
-      const attr = attrs.getNamedItem(name1) || attrs.getNamedItem(name2);
-      //@ts-ignore
-      props[name] = (v => (attr) ? (t => (cnv[t]) ? cnv[t](attr.value) : v)(_.typ(v)) : v)(props[name]);
-    });
+  private __init(shadow: ShadowRoot): void {
     /////////////////////////////////////////////////////////////////
     // make style sheets
-    this.__styles = [[props.rightCols, 'right'], [props.centerCols, 'center']]
+    this.__styles = [[this.rightCols, 'right'], [this.centerCols, 'center']]
       .map(a =>
         css`${(a[0] as string[])
           .reduce((r, col) => r + `tbody tr td:nth-child(${col}){text-align:${a[1]}}`, '')}`);
@@ -223,7 +226,7 @@ export class TymWcTableView extends HTMLElement {
     const tx = this.__makehtml();
     /////////////////////////////////////////////////////////////////
     // remove old elements
-    shadow.childNodes.forEach(node=>node.remove());
+    while (shadow.firstChild) shadow.removeChild(shadow.firstChild);
     /////////////////////////////////////////////////////////////////
     // make style sheets
     if (!isCSSSS) {

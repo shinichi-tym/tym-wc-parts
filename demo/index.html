@@ -20,7 +20,7 @@
       }
     </script>
     <hr>
-    <div id="TymWcTableView" style="padding: 0 2em;display: none;">
+    <div id="TymWcTableView" style="padding: 0 2em;display: block;">
       <h3>tag only</h3>
       <tym-wc-table-view right-cols="2,3,9" center-cols="4" last-sp="true">
         ----------,----------,----------,----------
@@ -28,8 +28,7 @@
         left,4,5,center
       </tym-wc-table-view>
       <br>
-      <tym-wc-table-view right-cols="1,2,3" last-sp="false">
-        単価,販売数,売上
+      <tym-wc-table-view cols="単価,販売数,売上" right-cols="1,2,3" last-sp="false">
         980,627,614460
         1980,1219,2413620
         2980,116,345680
@@ -67,8 +66,45 @@
       }
     </script>
     <hr>
-    <div id="TymWcTreeView" style="padding: 0 2em;display: none;">
-      <h3>coming soon ...</h3>
+    <div id="TymWcTreeView" style="padding: 0 2em;display: block;">
+      <h3>tag only</h3>
+      <tym-wc-tree-view id="demo3"
+       tree='["aaaaa","vv",["QQ"]]'>
+      </tym-wc-tree-view>
+      <script>
+        var demo3 = document.getElementById('demo3');
+        demo3.leafclick =  (event, texts) => console.log(event, texts);
+        demo3.leafmenu = (event, texts) => {console.log(event, texts);event.preventDefault();return false}
+        setTimeout(() => {
+          demo3
+            .tree = [
+              '11111111',
+              'node-2',
+              [
+                'node-2-1',
+                'node-2-2'
+              ]
+            ];
+        },2000);
+        setTimeout(() => {
+          demo3.setAttribute('tree', '1')
+          demo3
+            .tree = [
+              '22222222',
+              'node-2',
+              [
+                'node-2-1',
+                'node-2-2',
+                [
+                  'node-2-2-1',
+                  'node-2-2-2'
+                ]
+              ],
+              'last'
+            ];
+        }, 3000);
+      </script>
+      <br>
     </div>
   </div>
   <br>
@@ -80,7 +116,8 @@
   <!-- ////////////////////////////////////////////////////////// -->
   <script type="module">
     import '../dist/tym-wc-parts/tym-wc-table-view.js';
-    import './tym-wc-table-view.js';
+    import '../dist/tym-wc-parts/tym-wc-tree-view.js';
+    // import 'https://unpkg.com/tym-wc-parts/tym-wc-table-view.js';
   </script>
 </body>
 
