@@ -1,6 +1,6 @@
 {
   "name": "tym-wc-parts",
-  "version": "0.7.4",
+  "version": "0.7.5",
   "description": "Web Components created by tym",
   "keywords": [
     "front-end",
@@ -8,6 +8,8 @@
     "Webcomponent",
     "resize",
     "table",
+    "edit",
+    "editor",
     "grid",
     "tree",
     "folder"
@@ -25,6 +27,7 @@
   "exports": {
     ".": "./index.js",
     "./tym-wc-table-view.js": "./tym-wc-table-view.js",
+    "./tym-wc-table-edit.js": "./tym-wc-table-edit.js",
     "./tym-wc-tree-view.js": "./tym-wc-tree-view.js"
   }
 }

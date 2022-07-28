@@ -36,23 +36,86 @@
       </tym-wc-table-view>
       <br>
       <h3>delay setting for csv data by script</h3>
-      <tym-wc-table-view id="demo1" last-sp="false">
+      <tym-wc-table-view id="view1" last-sp="false">
       </tym-wc-table-view>
       <script>
         setTimeout(() => {
-          var elm = document.getElementById('demo1');
+          var elm = document.getElementById('view1');
           elm.textContent = [['--', '--', '--'], ['aa', 'bb', 'cc']].join('\n');
         }, 2000);
       </script>
       <br>
       <h3>create tag by script</h3>
-      <div id="demo2"></div>
+      <div id="view2"></div>
       <script>
         var elm = document.createElement('tym-wc-table-view');
         elm.textContent = "--,--,--\nAA,BB,CC";
-        document.getElementById('demo2').appendChild(elm);
+        document.getElementById('view2').appendChild(elm);
       </script>
- 
+
+    </div>
+  </div>
+  <!-- ////////////////////////////////////////////////////////// -->
+  <div style="padding: 0 2em">
+    <h2 id="TymWcTableEditHead">tym-wc-table-edit(click me)</h2>
+    <script>
+      TymWcTableEditHead.onclick = () => {
+        var o = TymWcTableEdit.style;
+        o.display = o.display == 'block' ? 'none' : 'block'
+      }
+    </script>
+    <hr>
+    <div id="TymWcTableEdit" style="padding: 0 2em;display: block;">
+      <h3>tag only</h3>
+      <tym-wc-table-edit right-cols="2,3,9" center-cols="4" last-sp="true">
+        ----------,----------,----------,----------
+        left,1,2,center
+        left,4,5,center
+      </tym-wc-table-edit>
+      <br>
+      <tym-wc-table-edit id="edit0" style="display:inline-block"
+       cols="単価,販売数,売上" right-cols="1,2,3" last-sp="false">
+        980,627,614460
+        1980,1219,2413620
+        2980,116,345680
+        3980,616,2451680
+      </tym-wc-table-edit>
+      <pre onclick="edit0log(this)" style="display:inline-block">[click me!]</pre>
+      <script>
+        function printcsv() {
+          document.getElementById("edit0").shadowRoot.querySelectorAll('tbody tr')
+            .forEach((tr,ix) => {
+              console.log(ix + ':' + Array.from(tr.children).map(td=>td.innerHTML).join(','));
+            });
+        }
+        function edit0log(o) {
+          printcsv();
+          o.innerHTML = '';
+          document.getElementById('edit0').shadowRoot.querySelectorAll('tbody tr')
+            .forEach((tr,ix)=>{
+              o.innerHTML += Array.from(tr.children).map(td=>td.innerHTML).join(',') + '\n';
+            });
+          o.innerHTML += '[click me!]'
+        }
+      </script>
+      <br>
+      <h3>delay setting for csv data by script</h3>
+      <tym-wc-table-edit id="edit1" last-sp="false">
+      </tym-wc-table-edit>
+      <script>
+        setTimeout(() => {
+          var elm = document.getElementById('edit1');
+          elm.textContent = [['--', '--', '--'], ['aa', 'bb', 'cc']].join('\n');
+        }, 2000);
+      </script>
+      <br>
+      <h3>create tag by script</h3>
+      <div id="edit2"></div>
+      <script>
+        var elm = document.createElement('tym-wc-table-edit');
+        elm.textContent = "--,--,--\nAA,BB,CC";
+        document.getElementById('edit2').appendChild(elm);
+      </script>
 
     </div>
   </div>
@@ -68,11 +131,11 @@
     <hr>
     <div id="TymWcTreeView" style="padding: 0 2em;display: block;">
       <h3>tree view</h3>
-      <tym-wc-tree-view id="demo3"
+      <tym-wc-tree-view id="tree1"
        tree='["aaaaa","vv",["QQ"]]'>
       </tym-wc-tree-view>
       <script>
-        var demo3 = document.getElementById('demo3');
+        var demo3 = document.getElementById('tree1');
         demo3.leafclick =  (event, texts) => console.log(event, texts);
         demo3.leafmenu = (event, texts) => {console.log(event, texts);event.preventDefault();return false}
         setTimeout(() => {
@@ -116,8 +179,11 @@
   <!-- ////////////////////////////////////////////////////////// -->
   <script type="module">
     import '../dist/tym-wc-parts/tym-wc-table-view.js';
+    import '../dist/tym-wc-parts/tym-wc-table-edit.js';
     import '../dist/tym-wc-parts/tym-wc-tree-view.js';
     // import 'https://unpkg.com/tym-wc-parts/tym-wc-table-view.js';
+    // import 'https://unpkg.com/tym-wc-parts/tym-wc-table-edit.js';
+    // import 'https://unpkg.com/tym-wc-parts/tym-wc-tree-view.js';
   </script>
 </body>
 

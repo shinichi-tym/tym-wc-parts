@@ -28,7 +28,22 @@ npm i tym-wc-parts
 ※ CDN 利用の場合は不要
 ```
 
-## 使い方 `(Usage:Angular)`
+<br>
+
+## 目次 (Table of contents)
+<br>
+
+1. [使い方](#使い方)
+1. [簡易テーブル表示](#簡易テーブル表示)
+1. [簡易テーブル表示編集](#簡易テーブル表示編集)
+1. [簡易ツリー表示](#簡易ツリー表示)
+1. please wait...
+
+<br> 
+
+> ## 使い方
+
+### `(Usage:Angular)`
 
 ```typescript : app.module.ts
 //--- app.module.ts ---
@@ -59,7 +74,7 @@ import 'tym-wc-parts';
 ></tym-wc-table-view>
 ```
 
-## 使い方 `(Usage:CDN)`
+### `(Usage:CDN)`
 
 ```html
 <tym-wc-table-view right-cols="2,4" last-sp="false">
@@ -181,6 +196,84 @@ import 'tym-wc-parts';
     ].join("\n");
 </script>
 ```
+
+<br>
+
+---
+
+<br>
+
+<h2 id="tym-wc-table-view"></h2>
+
+> ## 簡易テーブル表示編集 `[tym-wc-table-edit]`
+
+<br>
+
+単純な csv 形式データを, 簡易にテーブル表示し, 編集できます。  
+行ヘッダーをマウスでリサイズできます(not firefox)。
+
+<br>
+
+表示サンプル (Display image)
+
+![表示サンプル](/tym-wc-table-edit.png)
+
+- [定義]  
+  ( [[簡易テーブル表示](#簡易テーブル表示)] と同じ)
+
+## Usage
+
+```html
+<script type="module">
+  import 'https://unpkg.com/tym-wc-parts/tym-wc-table-edit.js';
+</script>
+
+<tym-wc-table-edit
+ right-cols="1,2,3"
+ center-cols=""
+ last-sp="false"
+ max-width="200">
+  単価,販売数,売上
+  980,627,614460
+  1980,1219,2413620
+  2980,116,345680
+  3980,616,2451680
+</tym-wc-table-edit>
+```
+
+```html
+<script type="module">
+  import 'https://unpkg.com/tym-wc-parts/tym-wc-table-edit.js';
+</script>
+
+<tym-wc-table-edit id="tymWcTableEdit"
+ cols="単価,販売数,売上"
+ right-cols="1,2,3"
+ center-cols=""
+ last-sp="false"
+ max-width="200"
+></tym-wc-table-edit>
+
+<script type="javascript">
+  document.getElementById("tymWcTableEdit")
+    .textContent = [
+      [980,627,614460],
+      [1980,1219,2413620],
+      [2980,116,345680],
+      [3980,616,2451680]
+    ].join("\n");
+  function printcsv() {
+    document.getElementById("tymWcTableEdit").shadowRoot.querySelectorAll('tbody tr')
+      .forEach((tr,ix) => {
+        console.log(ix + ':' + Array.from(tr.children).map(td=>td.innerHTML).join(','));
+      });
+  }
+</script>
+```
+
+<br>
+
+---
 
 <br>
 

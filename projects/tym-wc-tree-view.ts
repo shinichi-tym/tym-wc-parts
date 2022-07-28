@@ -122,7 +122,7 @@ export class TymWcTreeView extends HTMLElement {
 
   ///////////////////////////////////////////////////////////////////
 
-  private _leafclick = (event: MouseEvent, node: HTMLElement): void => {
+  private _leafclick(event: MouseEvent, node: HTMLElement): void {
     this.shadowRoot?.querySelector('.cur')?.classList.remove('cur');
     node.classList.add('cur')
     this.leafclick(event, gettexts(this.__leafs, Number(node.dataset.ix)));
@@ -138,7 +138,7 @@ export class TymWcTreeView extends HTMLElement {
 
   ///////////////////////////////////////////////////////////////////
 
-  private _leafmenu = (event: MouseEvent, node: HTMLElement): boolean => {
+  private _leafmenu(event: MouseEvent, node: HTMLElement): boolean {
     return this.leafmenu(event, gettexts(this.__leafs, Number(node.dataset.ix)));
   }
   private _leafmenu_func = (event: MouseEvent, texts: string[]): boolean => true;
@@ -253,10 +253,8 @@ export class TymWcTreeView extends HTMLElement {
     const dom = new DOMParser().parseFromString(tx, 'text/html');
     dom.body.childNodes.forEach(node => shadow.appendChild(node.cloneNode(true)));
     shadow.childNodes.forEach(node => {
-      //@ts-ignore
-      node.addEventListener('contextmenu', (event) => this._leafmenu(event, node))
-      //@ts-ignore
-      node.addEventListener('click', (event) => this._leafclick(event, node))
+      node.addEventListener('contextmenu', (event: Event) => this._leafmenu(event as MouseEvent, node as HTMLElement))
+      node.addEventListener('click', (event) => this._leafclick(event as MouseEvent, node as HTMLElement))
     });
   }
 

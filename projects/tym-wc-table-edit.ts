@@ -1,5 +1,5 @@
 /*!
- * tym-wc-table-view.js
+ * tym-wc-table-edit.js
  * Copyright (c) 2022 shinichi tayama
  * Released under the MIT license.
  * see https://opensource.org/licenses/MIT
@@ -25,9 +25,9 @@ const [css, html] = [isCSSSS ? _.css : _.cst, _.htm];
 
 /////////////////////////////////////////////////////////////////////
 /**
- * create a class for the tym-wc-table-view element
+ * create a class for the tym-wc-table-edit element
  */
-export class TymWcTableView extends HTMLElement {
+export class TymWcTableEdit extends HTMLElement {
 
   ///////////////////////////////////////////////////////////////////
   // constructor
@@ -210,7 +210,7 @@ export class TymWcTableView extends HTMLElement {
       .map(a =>
         css`${(a[0] as string[])
           .reduce((r, col) => r + `tbody tr td:nth-child(${col}){text-align:${a[1]}}`, '')}`);
-    this.__styles.unshift(TymWcTableView.styles);
+    this.__styles.unshift(TymWcTableEdit.styles);
     if (isCSSSS) {
       //@ts-ignore : set style sheets
       shadow.adoptedStyleSheets = this.__styles;
@@ -226,6 +226,150 @@ export class TymWcTableView extends HTMLElement {
     /////////////////////////////////////////////////////////////////
     // resize
     this.__resize();
+    this.__edit_func(shadow);
+  }
+
+  private __edit_func(shadow: ShadowRoot): void {
+    //---------------------------------------------------------------
+    // ..
+    const table = shadow.firstElementChild as HTMLTableElement;
+    const thead = table.firstElementChild as HTMLTableSectionElement;
+    const tbody = table.lastElementChild as HTMLTableSectionElement;
+    if (tbody.childElementCount == 0) return;
+    const theadRowNum = thead.childElementCount;
+    const maxrow = tbody.children.length - 1;
+    const maxcol = tbody.children[0].children.length - 1;
+    //---------------------------------------------------------------
+    // ..
+    let editElm = null as HTMLTableCellElement | null; // edited td cell
+    let crntElm = tbody.children[0].children[0] as HTMLTableCellElement; // current td cell
+    //---------------------------------------------------------------
+    // ..
+    const cell = (r: number, c: number) => tbody.children[r]?.children[c] as HTMLTableCellElement;
+    const cellRowCol = (td: HTMLTableCellElement | null) =>
+      (td) ? [(td.parentElement as HTMLTableRowElement).rowIndex - theadRowNum, td.cellIndex] : [0, 0];
+    const classlist = (elm: HTMLElement) => elm.classList;
+    const classrm = (elm: HTMLElement, cls: string) => classlist(elm).remove(cls);
+    const classadd = (elm: HTMLElement, cls: string) => classlist(elm).add(cls);
+    /****************************************************************
+     * set current element (crntElm, style)
+     * @param elm 対象エレメント
+     */
+    const setCurrent = (elm: HTMLTableCellElement) => {
+      const crn = 'crn';
+      classrm(crntElm, crn);
+      classadd(elm, crn);
+      crntElm = elm;
+    }
+    //---------------------------------------------------------------
+    // set tab index
+    tbody.childNodes.forEach(tr =>
+      tr.childNodes.forEach(td => (td as HTMLTableCellElement).tabIndex = -1));
+    setCurrent(cell(0, 0));
+    /****************************************************************
+     * mouse down event
+     * @param e MouseEvent
+     */
+    const event_mousedown = (e: MouseEvent) => {
+      let td = e.target as HTMLTableCellElement;
+      if (e.detail == 1) {
+        setCurrent(td);
+      } if (e.detail == 2) {
+        toEdit(td);
+        e.preventDefault();
+      }
+    }
+    tbody.addEventListener('mousedown', event_mousedown);
+    /****************************************************************
+     * keypress event
+     * @param e KeyboardEvent
+     */
+    const event_keypress = (e: KeyboardEvent) => {
+      const td = e.target as HTMLTableCellElement;
+      if (!editElm) {
+        toEdit(td);
+      }
+    }
+    tbody.addEventListener('keypress', event_keypress);
+    /****************************************************************
+     * key down event
+     * @param e KeyboardEvent
+     */
+    const event_keydown = (e: KeyboardEvent) => {
+      const thisCell = e.target as HTMLTableCellElement;
+      const [thisRowIx, thisColIx] = cellRowCol(thisCell);
+      //-------------------------------------------------------------
+      /** 矢印によるフォーカスの上下左右移動                       */
+      const arrow = (rowcol: number[]) => {
+        const td = cell(rowcol[0], rowcol[1]);
+        td.blur();
+        td.focus();
+        setCurrent(td);
+      }
+      const arrowmove = (isUpDown: boolean, isUpOrLeft: boolean) => {
+        const [A, B, C] = (isUpDown)
+          ? (isUpOrLeft) ? [(thisRowIx > 0), -1, 0] : [(thisRowIx < maxrow), 1, 0]
+          : (isUpOrLeft) ? [(thisColIx > 0), 0, -1] : [(thisColIx < maxcol), 0, 1];
+        arrow(A ? [thisRowIx + B, thisColIx + C] : [thisRowIx, thisColIx]);
+      }
+      //-------------------------------------------------------------
+      const eKey = e.key + ((!!editElm && (e.key != 'Tab' && e.key != 'Enter')) ? '_EDIT' : '');
+      const keya = new Map<string, Function>([
+        ['ArrowDown', () => arrowmove(true, false)],
+        ['ArrowUp', () => arrowmove(true, true)],
+        ['ArrowRight', () => arrowmove(false, false)],
+        ['ArrowLeft', () => arrowmove(false, true)],
+        ['Tab', () => arrowmove(false, e.shiftKey)],
+        ['Enter', () => arrowmove(true, e.shiftKey)],
+        ['Home', () => arrow(e.ctrlKey ? [0, 0] : [thisRowIx, 0])],
+        ['End', () => arrow(e.ctrlKey ? [maxrow, maxcol] : [thisRowIx, maxcol])],
+        ['F2', () => toEdit(thisCell)],
+        ['Backspace', () => (toEdit(thisCell), thisCell.innerText = '')],
+        ['Delete', () => thisCell.innerText = ''],
+        ['Escape_EDIT', () => {
+          thisCell.innerText = beforeValue!;
+          thisCell.blur();
+          thisCell.focus();
+        }],
+      ]);
+      const keyp = keya.get(eKey);
+      if (keyp) {
+        keyp();
+        e.preventDefault();
+      }
+    }
+    tbody.addEventListener('keydown', event_keydown);
+    /****************************************************************
+     * Escapeキー戻値用
+     */
+    let beforeValue: string | null;
+
+    /****************************************************************
+     * フォーカスアウトイベント処理，表示モードにする
+     */
+    const editBlue = () => {
+      if (editElm) {
+        editElm.removeEventListener('blur', editBlue);
+        editElm.removeAttribute('contentEditable');
+      }
+      beforeValue = null;
+      editElm = null;
+    }
+
+    /****************************************************************
+     * 対象セルを編集モードにする
+     * @param td 対象エレメント
+     */
+    const toEdit = (td: HTMLTableCellElement) => {
+      beforeValue = td.innerText;
+      td.contentEditable = 'true';
+      td.addEventListener('blur', editBlue);
+      const [sel, rng] = [window.getSelection(), document.createRange()];
+      rng.selectNodeContents(td);
+      sel?.removeAllRanges();
+      sel?.addRange(rng)
+      editElm = td;
+    }
   }
 
   ///////////////////////////////////////////////////////////////////
@@ -279,6 +423,13 @@ export class TymWcTableView extends HTMLElement {
     tbody tr:hover {
       opacity: 1;
     }
+    tbody .crn {
+      outline: solid 2px #000;
+      outline-offset: -2px;
+    }
+    tbody [contentEditable] {
+      background-color: #bfc;
+    }
     th,
     td {
       min-width: 4em;
@@ -302,4 +453,4 @@ export class TymWcTableView extends HTMLElement {
 /**
  * defind custom element
  */
-customElements.define('tym-wc-table-view', TymWcTableView);
+customElements.define('tym-wc-table-edit', TymWcTableEdit);

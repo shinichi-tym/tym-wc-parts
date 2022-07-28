@@ -1,0 +1,10 @@
+npm start  
+
+[edit] package.json  
+[edit] projects\package.json  
+[copy] README.md dist\tym-wc-parts\  
+[copy] projects\package.json dist\tym-wc-parts\  
+npm build  
+
+cd dist\tym-wc-parts\  
+publish  
